@@ -4,15 +4,15 @@ namespace StonkMarketGame.Core.Entities;
 
 public class StockHolding
 {
-    public TickerSymbol Ticker { get; }
+    public TickerSymbol Ticker { get; private set; } = default!;
     public int Quantity { get; private set; }
     public decimal AveragePrice { get; private set; }
 
-    public StockHolding(TickerSymbol ticker, int quantity, decimal avgPrice)
+    public StockHolding(TickerSymbol ticker, int quantity, decimal averagePrice)
     {
         Ticker = ticker;
         Quantity = quantity;
-        AveragePrice = avgPrice;
+        AveragePrice = averagePrice;
     }
 
     public void AddShares(int qty, decimal pricePerShare)

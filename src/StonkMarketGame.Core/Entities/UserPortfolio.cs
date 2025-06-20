@@ -8,6 +8,8 @@ public class UserPortfolio
     public decimal CashBalance { get; private set; }
     public List<StockHolding> Holdings { get; }
 
+    protected UserPortfolio() { }
+
     public UserPortfolio(ulong userId, decimal initialBalance = 10000m)
     {
         UserId = userId;
