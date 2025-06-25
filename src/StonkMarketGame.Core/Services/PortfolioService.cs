@@ -48,7 +48,7 @@ public class PortfolioService : IPortfolioService
 
         await _portfolioRepository.SaveAsync(portfolio);
 
-        return Result.Ok().WithSuccess($"Bought {quantity} shares of {ticker} at ${price}.");
+        return Result.Ok().WithSuccess($"Bought {quantity} shares of {ticker} at {price:C} for {totalCost:C}.");
     }
 
     public async Task<Result> SellAsync(ulong userId, TickerSymbol ticker, int quantity)
@@ -79,7 +79,7 @@ public class PortfolioService : IPortfolioService
 
         await _portfolioRepository.SaveAsync(portfolio);
 
-        return Result.Ok().WithSuccess($"Sold {quantity} shares of {ticker} at ${price} for ${totalProceeds}.");
+        return Result.Ok().WithSuccess($"Sold {quantity} shares of {ticker} at {price:C} for {totalProceeds:C}.");
     }
 
     public async Task<Result<UserPortfolio>> GetPortfolioAsync(ulong userId)
