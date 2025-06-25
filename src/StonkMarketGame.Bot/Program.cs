@@ -16,7 +16,10 @@ using StonkMarketGame.Infrastructure.Persistence;
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((context, config) =>
     {
-        config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        config
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddUserSecrets<Program>()
+            .AddEnvironmentVariables();
     })
     .ConfigureServices((context, services) =>
     {
