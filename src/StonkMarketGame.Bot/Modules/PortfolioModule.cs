@@ -63,19 +63,27 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
 
         var portfolio = result.Value;
 
+        decimal totalHoldingsValue = portfolio.Holdings.Sum(h => h.Quantity * h.AveragePrice);
+
         var embed = new EmbedBuilder()
-            .WithTitle($"{Context.User.Username}'s Portfolio 📊")
+            .WithTitle($"{Context.User.Username}'s Portfolio")
             .WithColor(new Color(0x173488))
-            .AddField("💰 Cash Balance", $"{portfolio.CashBalance:C}", inline: false);
+            .WithTimestamp(DateTimeOffset.UtcNow)
+            .WithFooter(footer => footer.WithText("Stonk Market Game"));
+
+        embed.AddField("💵 Cash Balance", $"`{portfolio.CashBalance:C}`", inline: true);
+        embed.AddField("📊 Holdings Value", $"`{totalHoldingsValue:C}`", inline: true);
 
         if (portfolio.Holdings.Any())
         {
+            embed.AddField("\u200B", "\u200B", inline: false);
+
             foreach (var holding in portfolio.Holdings)
             {
                 embed.AddField(
-                    $"{holding.Ticker}",
-                    $"{holding.Quantity} shares @ avg {holding.AveragePrice:C}",
-                    inline: false);
+                    $"{holding.Ticker} 🟢",
+                    $"{holding.Quantity} shares\nAvg Price: `{holding.AveragePrice:C}`",
+                    inline: true);
             }
         }
         else
