@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Refit;
 using StonkMarketGame.Bot;
+using StonkMarketGame.Bot.Services;
 using StonkMarketGame.Core.Interfaces;
 using StonkMarketGame.Core.Services;
 using StonkMarketGame.Infrastructure.MarketData;
@@ -34,6 +35,7 @@ var host = Host.CreateDefaultBuilder(args)
         }));
         services.AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()));
         services.AddSingleton<InteractionHandler>();
+        services.AddSingleton<EmbedService>();
         services.AddHostedService<BotService>();
 
         // EF Core
