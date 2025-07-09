@@ -33,7 +33,7 @@ public class BotService : IHostedService
             return Task.CompletedTask;
         };
 
-        _client.Ready += OnReady;
+        _client.Ready += OnReadyAsync;
 
         await _client.LoginAsync(TokenType.Bot, _token);
         await _client.StartAsync();
@@ -50,8 +50,9 @@ public class BotService : IHostedService
         await _client.StopAsync();
     }
 
-    private async Task OnReady()
+    private async Task OnReadyAsync()
     {
+        await _client.SetGameAsync("with stonks 📈", type: ActivityType.Playing);
         _logger.LogInformation($"Bot connected as {_client.CurrentUser}");
 
         // ---------------------- DEBUG ----------------------
@@ -60,5 +61,8 @@ public class BotService : IHostedService
         // ---------------------- DEBUG ----------------------
 
         await _interactionHandler.RegisterCommandsAsync(testGuildId);
+        
+        // Register commands globally
+        await _interactionHandler.RegisterCommandsAsync();
     }
 }
