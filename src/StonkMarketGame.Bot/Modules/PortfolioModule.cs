@@ -1,4 +1,3 @@
-using Discord;
 using Discord.Interactions;
 using StonkMarketGame.Bot.Services;
 using StonkMarketGame.Core.Interfaces;

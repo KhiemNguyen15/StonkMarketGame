@@ -11,6 +11,7 @@ public class EmbedService
             .WithDescription(description)
             .WithColor(new Color(0x2ECC71)) // Green
             .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game")
             .Build();
     }
 
@@ -21,6 +22,7 @@ public class EmbedService
             .WithDescription(description)
             .WithColor(new Color(0xE74C3C)) // Red
             .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game")
             .Build();
     }
 
@@ -33,8 +35,8 @@ public class EmbedService
         var embed = new EmbedBuilder()
             .WithTitle($"{username}'s Portfolio")
             .WithColor(new Color(0x173488))
-            .WithTimestamp(DateTimeOffset.UtcNow)
-            .WithFooter(footer => footer.WithText("Stonk Market Game"));
+            .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game");
 
         embed.AddField("💵 Cash Balance", $"`{cashBalance:C}`", inline: true);
         embed.AddField("📊 Holdings Value", $"`{holdingsValue:C}`", inline: true);
