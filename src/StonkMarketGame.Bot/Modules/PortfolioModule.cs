@@ -1,4 +1,5 @@
 using Discord.Interactions;
+using Microsoft.Extensions.Logging;
 using StonkMarketGame.Bot.Services;
 using StonkMarketGame.Core.Interfaces;
 using StonkMarketGame.Core.ValueObjects;
@@ -9,11 +10,13 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
 {
     private readonly IPortfolioService _portfolioService;
     private readonly EmbedService _embedService;
+    private readonly ILogger<PortfolioModule> _logger;
 
-    public PortfolioModule(IPortfolioService portfolioService, EmbedService embedService)
+    public PortfolioModule(IPortfolioService portfolioService, EmbedService embedService, ILogger<PortfolioModule> logger)
     {
         _portfolioService = portfolioService;
         _embedService = embedService;
+        _logger = logger;
     }
 
     [SlashCommand("buy", "Buy shares of a stock")]
@@ -30,6 +33,12 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
         }
         else
         {
+            _logger.LogWarning("Buy failed for user {UserId}, ticker {Ticker}, quantity {Quantity}: {Message}",
+                Context.User.Id,
+                ticker.ToUpper(),
+                quantity,
+                result.Errors.First().Message);
+
             var embed = _embedService.BuildError("Trade Failed", result.Errors.First().Message);
             await FollowupAsync(embed: embed);
         }
@@ -49,6 +58,12 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
         }
         else
         {
+            _logger.LogWarning("Sell failed for user {UserId}, ticker {Ticker}, quantity {Quantity}: {Message}",
+                Context.User.Id,
+                ticker.ToUpper(),
+                quantity,
+                result.Errors.First().Message);
+
             var embed = _embedService.BuildError("Trade Failed", result.Errors.First().Message);
             await FollowupAsync(embed: embed);
         }
@@ -63,6 +78,7 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
 
         if (result.IsFailed)
         {
+            _logger.LogWarning("Portfolio lookup failed for user {UserId}", Context.User.Id);
             var errorEmbed = _embedService.BuildError("Action Failed", "Failed to load your portfolio");
             await FollowupAsync(embed: errorEmbed);
             return;
