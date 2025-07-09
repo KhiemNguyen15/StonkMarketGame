@@ -1,4 +1,5 @@
 using Discord;
+using StonkMarketGame.Core.DTOs;
 
 namespace StonkMarketGame.Bot.Services;
 
@@ -57,6 +58,25 @@ public class EmbedService
         {
             embed.AddField("📈 Holdings", "You don't own any stocks yet.", inline: false);
         }
+
+        return embed.Build();
+    }
+
+    public Embed BuildStockEmbed(string ticker, StockQuote quote)
+    {
+        var embed = new EmbedBuilder()
+            .WithTitle($"📊 {ticker.ToUpper()} Stock Overview")
+            .WithColor(quote.Change >= 0 ? Color.Green : Color.Red)
+            .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game • Data from Finnhub");
+
+        embed.AddField("Current Price", $"`{quote.Current:C}`", true);
+        embed.AddField("Change", $"{(quote.Change >= 0 ? "🟢" : "🔴")} {quote.Change:+0.##;-0.##} ({quote.PercentChange:+0.##;-0.##}%)", true);
+        embed.AddField("Previous Close", $"`{quote.PreviousClose:C}`", true);
+
+        embed.AddField("Day High", $"`{quote.High:C}`", true);
+        embed.AddField("Day Low", $"`{quote.Low:C}`", true);
+        embed.AddField("Open", $"`{quote.Open:C}`", true);
 
         return embed.Build();
     }

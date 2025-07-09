@@ -14,5 +14,17 @@ public interface IFinnhubApi
 public record FinnhubQuoteResponse
 {
     [JsonPropertyName("c")]
-    public decimal CurrentPrice { get; set; }
+    public decimal Current { get; set; }
+
+    [JsonPropertyName("o")]
+    public decimal Open { get; set; }
+
+    [JsonPropertyName("h")]
+    public decimal High { get; set; }
+
+    [JsonPropertyName("l")]
+    public decimal Low { get; set; }
+
+    [JsonPropertyName("pc")]
+    public decimal PreviousClose { get; set; }
 }
