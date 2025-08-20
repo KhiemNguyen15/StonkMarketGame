@@ -54,13 +54,6 @@ public class BotService : IHostedService
     {
         await _client.SetGameAsync("with stonks 📈", type: ActivityType.Playing);
         _logger.LogInformation($"Bot connected as {_client.CurrentUser}");
-
-        // ---------------------- DEBUG ----------------------
-        // Ensure commands and registered globally later
-        var testGuildId = ulong.Parse("TEST_GUILD_ID");
-        // ---------------------- DEBUG ----------------------
-
-        await _interactionHandler.RegisterCommandsAsync(testGuildId);
         
         // Register commands globally
         await _interactionHandler.RegisterCommandsAsync();
