@@ -1,0 +1,51 @@
+{
+  "name": "stonk-market-game",
+  "version": "0.1.1",
+  "private": true,
+  "description": "A Discord bot for simulating stock market trading",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KhiemNguyen15/StonkMarketGame.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "semantic-release": "^22.0.0",
+    "@semantic-release/changelog": "^6.0.0",
+    "@semantic-release/git": "^10.0.0",
+    "@semantic-release/github": "^9.0.0",
+    "semantic-release-dotnet": "^1.0.0"
+  },
+  "release": {
+    "branches": [
+      "master"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "semantic-release-dotnet",
+        {
+          "paths": [
+            "src/StonkMarketGame.Bot/StonkMarketGame.Bot.csproj",
+            "src/StonkMarketGame.Core/StonkMarketGame.Core.csproj",
+            "src/StonkMarketGame.Infrastructure/StonkMarketGame.Infrastructure.csproj"
+          ]
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md",
+            "src/StonkMarketGame.Bot/StonkMarketGame.Bot.csproj",
+            "src/StonkMarketGame.Core/StonkMarketGame.Core.csproj",
+            "src/StonkMarketGame.Infrastructure/StonkMarketGame.Infrastructure.csproj"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      "@semantic-release/github"
+    ]
+  }
+}
