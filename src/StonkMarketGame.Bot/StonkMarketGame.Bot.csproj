@@ -1,32 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\StonkMarketGame.Core\StonkMarketGame.Core.csproj" />
-    <ProjectReference Include="..\StonkMarketGame.Infrastructure\StonkMarketGame.Infrastructure.csproj" />
+    <ProjectReference Include="..\StonkMarketGame.Core\StonkMarketGame.Core.csproj"/>
+    <ProjectReference Include="..\StonkMarketGame.Infrastructure\StonkMarketGame.Infrastructure.csproj"/>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="3.17.4" />
-    <PackageReference Include="Discord.Net.Interactions" Version="3.17.4" />
+    <PackageReference Include="Discord.Net" Version="3.17.4"/>
+    <PackageReference Include="Discord.Net.Interactions" Version="3.17.4"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.6" />
-    <PackageReference Include="Refit" Version="8.0.0" />
-    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.6"/>
+    <PackageReference Include="Refit" Version="8.0.0"/>
+    <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0"/>
   </ItemGroup>
-
   <PropertyGroup>
-    <Version>0.1.1</Version>
+    <Version>0.2.0</Version>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>c06bbf5f-7c44-443b-b3b5-8920e390d23d</UserSecretsId>
   </PropertyGroup>
-
 </Project>
