@@ -80,4 +80,39 @@ public class EmbedService
 
         return embed.Build();
     }
+
+    public Embed BuildHelp()
+    {
+        var embed = new EmbedBuilder()
+            .WithTitle("📋 Stonk Market Game Commands")
+            .WithDescription("Welcome to the Stonk Market Game! Here are the available commands:")
+            .WithColor(new Color(0x3498DB)) // Blue
+            .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game");
+
+        embed.AddField("💹 Market Commands",
+            "`/quote <ticker>` - Get real-time stock data\n" +
+            "Example: `/quote AAPL`",
+            inline: false);
+
+        embed.AddField("💼 Portfolio Commands",
+            "`/portfolio` - View your portfolio and cash balance\n" +
+            "`/buy <ticker> <quantity>` - Buy shares of a stock\n" +
+            "`/sell <ticker> <quantity>` - Sell shares from your portfolio\n" +
+            "Example: `/buy MSFT 10`, `/sell AAPL 5`",
+            inline: false);
+
+        embed.AddField("ℹ️ Help",
+            "`/help` - Display this help message",
+            inline: false);
+
+        embed.AddField("💡 Getting Started",
+            "1. Check a stock price with `/quote`\n" +
+            "2. Buy shares with `/buy`\n" +
+            "3. Track your investments with `/portfolio`\n" +
+            "4. Sell when you're ready with `/sell`",
+            inline: false);
+
+        return embed.Build();
+    }
 }
