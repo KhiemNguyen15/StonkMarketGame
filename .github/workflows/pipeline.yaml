@@ -40,10 +40,10 @@ jobs:
           LOWERCASE_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           echo "value=$LOWERCASE_REPO" >> "$GITHUB_OUTPUT"
 
-      - name: Extract version from csproj
+      - name: Get latest git tag
         id: app-version
         run: |
-          version=$(grep '<Version>' src/StonkMarketGame.Bot/StonkMarketGame.Bot.csproj | sed 's/.*<Version>\(.*\)<\/Version>.*/\1/')
+          version=$(git describe --tags --abbrev=0 | sed 's/^v//')
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       - name: Build and push Docker image
