@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using StonkMarketGame.Core.Configuration;
 using StonkMarketGame.Core.Entities;
 using StonkMarketGame.Core.Interfaces;
 
@@ -7,10 +9,12 @@ namespace StonkMarketGame.Infrastructure.Persistence;
 public class PortfolioRepository : IPortfolioRepository
 {
     private readonly AppDbContext _db;
+    private readonly GameSettings _gameSettings;
 
-    public PortfolioRepository(AppDbContext db)
+    public PortfolioRepository(AppDbContext db, IOptions<GameSettings> gameSettings)
     {
         _db = db;
+        _gameSettings = gameSettings.Value;
     }
 
     public async Task<UserPortfolio> GetOrCreatePortfolioAsync(ulong userId)
@@ -21,7 +25,7 @@ public class PortfolioRepository : IPortfolioRepository
 
         if (portfolio == null)
         {
-            portfolio = new UserPortfolio(userId);
+            portfolio = new UserPortfolio(userId, _gameSettings.DefaultStartingBalance);
             _db.Portfolios.Add(portfolio);
             await _db.SaveChangesAsync();
         }

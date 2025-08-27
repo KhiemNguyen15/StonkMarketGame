@@ -10,7 +10,7 @@ public class UserPortfolio
 
     protected UserPortfolio() { }
 
-    public UserPortfolio(ulong userId, decimal initialBalance = 10000m)
+    public UserPortfolio(ulong userId, decimal initialBalance = 100000m)
     {
         UserId = userId;
         CashBalance = initialBalance;

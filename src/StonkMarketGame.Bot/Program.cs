@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Refit;
 using StonkMarketGame.Bot;
 using StonkMarketGame.Bot.Services;
+using StonkMarketGame.Core.Configuration;
 using StonkMarketGame.Core.Interfaces;
 using StonkMarketGame.Core.Services;
 using StonkMarketGame.Infrastructure.MarketData;
@@ -28,6 +29,9 @@ var host = Host.CreateDefaultBuilder(args)
 
         // Discord config
         services.Configure<DiscordSettings>(config.GetSection("Discord"));
+
+        // Game config
+        services.Configure<GameSettings>(config.GetSection("Game"));
 
         services.AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
         {
