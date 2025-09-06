@@ -21,7 +21,7 @@ public static class ServiceRegistrar
     {
         RegisterDiscordServices(services, configuration);
         RegisterDatabaseServices(services, configuration);
-        RegisterExternalApiServices(services);
+        RegisterExternalApiServices(services, configuration);
         RegisterCoreServices(services, configuration);
     }
 
@@ -45,30 +45,57 @@ public static class ServiceRegistrar
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
     }
 
-    private static void RegisterExternalApiServices(IServiceCollection services)
+    private static void RegisterExternalApiServices(IServiceCollection services, IConfiguration configuration)
     {
+        var resilienceSettings = configuration.GetSection("Resilience").Get<ResilienceSettings>() ?? new ResilienceSettings();
+        
         services.AddRefitClient<IFinnhubApi>()
             .ConfigureHttpClient(c =>
             {
                 c.BaseAddress = new Uri("https://finnhub.io/api/v1/");
-                c.Timeout = TimeSpan.FromSeconds(30);
+                c.Timeout = resilienceSettings.Timeout.HttpClientTimeout;
             })
             .AddStandardResilienceHandler(options =>
             {
-                options.Retry.MaxRetryAttempts = 3;
-                options.Retry.BackoffType = DelayBackoffType.Exponential;
-                options.Retry.Delay = TimeSpan.FromSeconds(1);
-                options.CircuitBreaker.FailureRatio = 0.5;
-                options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(30);
-                options.CircuitBreaker.MinimumThroughput = 3;
-                options.CircuitBreaker.BreakDuration = TimeSpan.FromSeconds(30);
-                options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(10);
+                options.Retry.MaxRetryAttempts = resilienceSettings.Retry.MaxRetryAttempts;
+                options.Retry.BackoffType = resilienceSettings.Retry.BackoffType.Equals("Exponential", StringComparison.OrdinalIgnoreCase) 
+                    ? DelayBackoffType.Exponential 
+                    : DelayBackoffType.Linear;
+                options.Retry.Delay = resilienceSettings.Retry.BaseDelay;
+                options.Retry.OnRetry = args =>
+                {
+                    Console.WriteLine($"Finnhub API retry #{args.AttemptNumber + 1} after {args.RetryDelay.TotalMilliseconds}ms delay. Exception: {args.Outcome.Exception?.Message}");
+                    return ValueTask.CompletedTask;
+                };
+                
+                options.CircuitBreaker.FailureRatio = resilienceSettings.CircuitBreaker.FailureRatio;
+                options.CircuitBreaker.SamplingDuration = resilienceSettings.CircuitBreaker.SamplingDuration;
+                options.CircuitBreaker.MinimumThroughput = resilienceSettings.CircuitBreaker.MinimumThroughput;
+                options.CircuitBreaker.BreakDuration = resilienceSettings.CircuitBreaker.BreakDuration;
+                options.CircuitBreaker.OnOpened = _ =>
+                {
+                    Console.WriteLine($"Finnhub API circuit breaker opened. Break duration: {resilienceSettings.CircuitBreaker.BreakDuration.TotalSeconds}s");
+                    return ValueTask.CompletedTask;
+                };
+                options.CircuitBreaker.OnClosed = _ =>
+                {
+                    Console.WriteLine("Finnhub API circuit breaker closed");
+                    return ValueTask.CompletedTask;
+                };
+                
+                options.AttemptTimeout.Timeout = resilienceSettings.Timeout.AttemptTimeout;
+                options.AttemptTimeout.OnTimeout = _ =>
+                {
+                    Console.WriteLine($"Finnhub API request timed out after {resilienceSettings.Timeout.AttemptTimeout.TotalSeconds}s");
+                    return ValueTask.CompletedTask;
+                };
             });
     }
 
     private static void RegisterCoreServices(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<GameSettings>(configuration.GetSection("Game"));
+        services.Configure<ResilienceSettings>(configuration.GetSection("Resilience"));
 
         services.AddScoped<IMarketDataProvider, FinnhubMarketDataProvider>();
         services.AddScoped<IPortfolioRepository, PortfolioRepository>();
