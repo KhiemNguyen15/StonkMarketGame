@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.3.0...v0.4.0) (2025-09-06)
+
+
+### Features
+
+* **bot:** Add HTTP timeouts and resilient retries for Finnhub client ([#14](https://github.com/KhiemNguyen15/StonkMarketGame/issues/14)) ([1098434](https://github.com/KhiemNguyen15/StonkMarketGame/commit/1098434cc3ec067fbeccc18742c09f5254f9149a))
+
 # [0.3.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.2.0...v0.3.0) (2025-08-27)
 
 
