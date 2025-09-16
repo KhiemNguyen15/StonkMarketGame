@@ -95,8 +95,8 @@ public class EmbedService
                 .Select(t =>
                 {
                     var typeText = t.Type == TransactionType.Buy ? "BOUGHT" : "SOLD";
-                    var time = t.Timestamp.ToLocalTime().ToString("h:mm tt");
-                    return $"- `{typeText}` {t.Ticker.Value} x{t.Quantity} @ {t.Price:C} ({time})";
+                    var unixTimestamp = new DateTimeOffset(t.Timestamp).ToUnixTimeSeconds();
+                    return $"- `{typeText}` {t.Ticker.Value} x{t.Quantity} @ {t.Price:C} (<t:{unixTimestamp}:t>)";
                 }));
 
             embed.AddField(dateHeader, transactionsList);
