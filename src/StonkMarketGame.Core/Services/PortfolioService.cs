@@ -46,10 +46,8 @@ public class PortfolioService : IPortfolioService
 
         portfolio.AdjustCash(-totalCost);
 
-        await _portfolioRepository.SaveAsync(portfolio);
-
         var transaction = new Transaction(userId, ticker, TransactionType.Buy, quantity, price);
-        await _portfolioRepository.SaveTransactionAsync(transaction);
+        await _portfolioRepository.SavePortfolioAndTransactionAsync(portfolio, transaction);
 
         return Result.Ok().WithSuccess($"Bought {quantity} shares of {ticker} at {price:C} for {totalCost:C}.");
     }
@@ -80,10 +78,8 @@ public class PortfolioService : IPortfolioService
         var totalProceeds = price * quantity;
         portfolio.AdjustCash(totalProceeds);
 
-        await _portfolioRepository.SaveAsync(portfolio);
-
         var transaction = new Transaction(userId, ticker, TransactionType.Sell, quantity, price);
-        await _portfolioRepository.SaveTransactionAsync(transaction);
+        await _portfolioRepository.SavePortfolioAndTransactionAsync(portfolio, transaction);
 
         return Result.Ok().WithSuccess($"Sold {quantity} shares of {ticker} at {price:C} for {totalProceeds:C}.");
     }

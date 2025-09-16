@@ -45,6 +45,13 @@ public class PortfolioRepository : IPortfolioRepository
         await _db.SaveChangesAsync();
     }
 
+    public async Task SavePortfolioAndTransactionAsync(UserPortfolio portfolio, Transaction transaction)
+    {
+        _db.Portfolios.Update(portfolio);
+        _db.Transactions.Add(transaction);
+        await _db.SaveChangesAsync();
+    }
+
     public async Task<List<Transaction>> GetTransactionHistoryAsync(ulong userId, int limit = 50)
     {
         return await _db.Transactions
