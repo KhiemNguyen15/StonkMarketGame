@@ -4,11 +4,10 @@ using StonkMarketGame.Core.ValueObjects;
 
 namespace StonkMarketGame.Infrastructure.Persistence;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<UserPortfolio> Portfolios { get; set; }
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public DbSet<Transaction> Transactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,6 +24,17 @@ public class AppDbContext : DbContext
                         v => new TickerSymbol(v));
                 holdings.HasKey("PortfolioId", "Ticker");
             });
+        });
+
+        modelBuilder.Entity<Transaction>(entity =>
+        {
+            entity.HasKey(t => t.Id);
+            entity.Property(t => t.Ticker)
+                .HasConversion(
+                    v => v.Value,
+                    v => new TickerSymbol(v));
+            entity.Property(t => t.Type)
+                .HasConversion<string>();
         });
     }
 }

@@ -48,6 +48,9 @@ public class PortfolioService : IPortfolioService
 
         await _portfolioRepository.SaveAsync(portfolio);
 
+        var transaction = new Transaction(userId, ticker, TransactionType.Buy, quantity, price);
+        await _portfolioRepository.SaveTransactionAsync(transaction);
+
         return Result.Ok().WithSuccess($"Bought {quantity} shares of {ticker} at {price:C} for {totalCost:C}.");
     }
 
@@ -79,6 +82,9 @@ public class PortfolioService : IPortfolioService
 
         await _portfolioRepository.SaveAsync(portfolio);
 
+        var transaction = new Transaction(userId, ticker, TransactionType.Sell, quantity, price);
+        await _portfolioRepository.SaveTransactionAsync(transaction);
+
         return Result.Ok().WithSuccess($"Sold {quantity} shares of {ticker} at {price:C} for {totalProceeds:C}.");
     }
 
@@ -86,5 +92,18 @@ public class PortfolioService : IPortfolioService
     {
         var portfolio = await _portfolioRepository.GetOrCreatePortfolioAsync(userId);
         return Result.Ok(portfolio);
+    }
+
+    public async Task<Result<List<Transaction>>> GetTransactionHistoryAsync(ulong userId, int limit = 50)
+    {
+        try
+        {
+            var transactions = await _portfolioRepository.GetTransactionHistoryAsync(userId, limit);
+            return Result.Ok(transactions);
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail($"Failed to retrieve transaction history: {ex.Message}");
+        }
     }
 }

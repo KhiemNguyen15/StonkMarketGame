@@ -1,10 +1,13 @@
 using Discord;
 using StonkMarketGame.Core.DTOs;
+using StonkMarketGame.Core.Entities;
 
 namespace StonkMarketGame.Bot.Services;
 
 public class EmbedService
 {
+    private static readonly Color BotColor = new Color(0x173488);
+
     public Embed BuildSuccess(string title, string description)
     {
         return new EmbedBuilder()
@@ -35,7 +38,7 @@ public class EmbedService
     {
         var embed = new EmbedBuilder()
             .WithTitle($"{username}'s Portfolio")
-            .WithColor(new Color(0x173488))
+            .WithColor(BotColor)
             .WithCurrentTimestamp()
             .WithFooter("Stonk Market Game");
 
@@ -62,6 +65,46 @@ public class EmbedService
         return embed.Build();
     }
 
+    public Embed BuildHistory(string username, List<Transaction> transactions)
+    {
+        var embed = new EmbedBuilder()
+            .WithTitle($"{username}'s Trading History")
+            .WithColor(BotColor)
+            .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game");
+
+        if (!transactions.Any())
+        {
+            embed.WithDescription("You haven't made any trades yet. Use `/buy` to start trading!");
+            return embed.Build();
+        }
+
+        embed.WithDescription($"Showing your last {Math.Min(transactions.Count, 50)} transactions");
+
+        var groupedTransactions = transactions
+            .Take(50)
+            .GroupBy(t => t.Timestamp.Date)
+            .OrderByDescending(g => g.Key)
+            .Take(10);
+
+        foreach (var group in groupedTransactions)
+        {
+            var dateHeader = group.Key.ToString("MMM dd, yyyy");
+            var transactionsList = string.Join("\n", group
+                .OrderByDescending(t => t.Timestamp)
+                .Select(t =>
+                {
+                    var typeText = t.Type == TransactionType.Buy ? "BOUGHT" : "SOLD";
+                    var time = t.Timestamp.ToLocalTime().ToString("h:mm tt");
+                    return $"- `{typeText}` {t.Ticker.Value} x{t.Quantity} @ {t.Price:C} ({time})";
+                }));
+
+            embed.AddField(dateHeader, transactionsList);
+        }
+
+        return embed.Build();
+    }
+
     public Embed BuildStockEmbed(string ticker, StockQuote quote)
     {
         var embed = new EmbedBuilder()
@@ -71,7 +114,9 @@ public class EmbedService
             .WithFooter("Stonk Market Game • Data from Finnhub");
 
         embed.AddField("Current Price", $"`{quote.Current:C}`", true);
-        embed.AddField("Change", $"{(quote.Change >= 0 ? "🟢" : "🔴")} {quote.Change:+0.##;-0.##} ({quote.PercentChange:+0.##;-0.##}%)", true);
+        embed.AddField("Change",
+            $"{(quote.Change >= 0 ? "🟢" : "🔴")} {quote.Change:+0.##;-0.##} ({quote.PercentChange:+0.##;-0.##}%)",
+            true);
         embed.AddField("Previous Close", $"`{quote.PreviousClose:C}`", true);
 
         embed.AddField("Day High", $"`{quote.High:C}`", true);
@@ -97,6 +142,7 @@ public class EmbedService
 
         embed.AddField("💼 Portfolio Commands",
             "`/portfolio` - View your portfolio and cash balance\n" +
+            "`/history` - View your trading history\n" +
             "`/buy <ticker> <quantity>` - Buy shares of a stock\n" +
             "`/sell <ticker> <quantity>` - Sell shares from your portfolio\n" +
             "Example: `/buy MSFT 10`, `/sell AAPL 5`",

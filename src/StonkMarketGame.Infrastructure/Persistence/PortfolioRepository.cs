@@ -38,4 +38,19 @@ public class PortfolioRepository : IPortfolioRepository
         _db.Portfolios.Update(portfolio);
         await _db.SaveChangesAsync();
     }
+
+    public async Task SaveTransactionAsync(Transaction transaction)
+    {
+        _db.Transactions.Add(transaction);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<List<Transaction>> GetTransactionHistoryAsync(ulong userId, int limit = 50)
+    {
+        return await _db.Transactions
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.Timestamp)
+            .Take(limit)
+            .ToListAsync();
+    }
 }

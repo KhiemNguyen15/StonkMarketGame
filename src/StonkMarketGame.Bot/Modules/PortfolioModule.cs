@@ -12,7 +12,8 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
     private readonly EmbedService _embedService;
     private readonly ILogger<PortfolioModule> _logger;
 
-    public PortfolioModule(IPortfolioService portfolioService, EmbedService embedService, ILogger<PortfolioModule> logger)
+    public PortfolioModule(IPortfolioService portfolioService, EmbedService embedService,
+        ILogger<PortfolioModule> logger)
     {
         _portfolioService = portfolioService;
         _embedService = embedService;
@@ -91,6 +92,27 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
             portfolio.CashBalance,
             portfolio.Holdings.Sum(h => h.Quantity * h.AveragePrice),
             portfolio.Holdings.Select(h => (h.Ticker.Value, h.Quantity, h.AveragePrice)).ToList());
+
+        await FollowupAsync(embed: embed);
+    }
+
+    [SlashCommand("history", "View your trading history")]
+    public async Task History()
+    {
+        await DeferAsync();
+
+        var result = await _portfolioService.GetTransactionHistoryAsync(Context.User.Id);
+
+        if (result.IsFailed)
+        {
+            _logger.LogWarning("Transaction history lookup failed for user {UserId}", Context.User.Id);
+            var errorEmbed = _embedService.BuildError("Action Failed", "Failed to load your transaction history");
+            await FollowupAsync(embed: errorEmbed);
+            return;
+        }
+
+        var transactions = result.Value;
+        var embed = _embedService.BuildHistory(Context.User.Username, transactions);
 
         await FollowupAsync(embed: embed);
     }
