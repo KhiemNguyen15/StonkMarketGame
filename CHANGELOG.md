@@ -1,3 +1,10 @@
+## [0.5.2](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.5.1...v0.5.2) (2025-09-16)
+
+
+### Bug Fixes
+
+* **bot:** Display proper time for transactions ([497d03d](https://github.com/KhiemNguyen15/StonkMarketGame/commit/497d03d2094ede3f5f5eae6ec433107abb184a2c))
+
 ## [0.5.1](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.5.0...v0.5.1) (2025-09-16)
 
 
