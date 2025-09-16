@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.5.0...v0.5.1) (2025-09-16)
+
+
+### Bug Fixes
+
+* Configure proper UTF-8 locale in Docker container ([#19](https://github.com/KhiemNguyen15/StonkMarketGame/issues/19)) ([9318039](https://github.com/KhiemNguyen15/StonkMarketGame/commit/9318039884f31726674c019a333dcb3eed30bf73))
+
 # [0.5.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.4.0...v0.5.0) (2025-09-16)
 
 
