@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.4.0...v0.5.0) (2025-09-16)
+
+
+### Features
+
+* **bot:** Add /history slash command to show user trade history ([#16](https://github.com/KhiemNguyen15/StonkMarketGame/issues/16)) ([8a2a4a9](https://github.com/KhiemNguyen15/StonkMarketGame/commit/8a2a4a9e34dbdc0991788dd938eec3b2a0eb84c8))
+
 # [0.4.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.3.0...v0.4.0) (2025-09-06)
 
 
