@@ -6,14 +6,14 @@ namespace StonkMarketGame.Bot.Services;
 
 public class EmbedService
 {
-    private static readonly Color BotColor = new Color(0x173488);
+    private static readonly Color BotColor = new(0x173488);
 
     public Embed BuildSuccess(string title, string description)
     {
         return new EmbedBuilder()
             .WithTitle($"✅ {title}")
             .WithDescription(description)
-            .WithColor(new Color(0x2ECC71)) // Green
+            .WithColor(Color.Green)
             .WithCurrentTimestamp()
             .WithFooter("Stonk Market Game")
             .Build();
@@ -24,7 +24,7 @@ public class EmbedService
         return new EmbedBuilder()
             .WithTitle($"❌ {title}")
             .WithDescription(description)
-            .WithColor(new Color(0xE74C3C)) // Red
+            .WithColor(Color.Red)
             .WithCurrentTimestamp()
             .WithFooter("Stonk Market Game")
             .Build();
@@ -45,7 +45,7 @@ public class EmbedService
         embed.AddField("💵 Cash Balance", $"`{cashBalance:C}`", inline: true);
         embed.AddField("📊 Holdings Value", $"`{holdingsValue:C}`", inline: true);
 
-        if (holdings.Any())
+        if (holdings.Count != 0)
         {
             embed.AddField("\u200B", "\u200B", inline: false);
 
@@ -73,7 +73,7 @@ public class EmbedService
             .WithCurrentTimestamp()
             .WithFooter("Stonk Market Game");
 
-        if (!transactions.Any())
+        if (transactions.Count == 0)
         {
             embed.WithDescription("You haven't made any trades yet. Use `/buy` to start trading!");
             return embed.Build();
