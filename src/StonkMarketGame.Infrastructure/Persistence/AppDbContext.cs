@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<UserPortfolio> Portfolios { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<PendingTransaction> PendingTransactions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +36,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     v => new TickerSymbol(v));
             entity.Property(t => t.Type)
                 .HasConversion<string>();
+        });
+
+        modelBuilder.Entity<PendingTransaction>(entity =>
+        {
+            entity.HasKey(t => t.Id);
+            entity.Property(t => t.Ticker)
+                .HasConversion(
+                    v => v.Value,
+                    v => new TickerSymbol(v));
+            entity.Property(t => t.Type)
+                .HasConversion<string>();
+            entity.Property(t => t.Status)
+                .HasConversion<string>();
+            entity.HasIndex(t => new { t.Status, t.ScheduledFor });
+            entity.HasIndex(t => t.UserId);
         });
     }
 }
