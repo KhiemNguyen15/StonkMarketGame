@@ -137,6 +137,12 @@ public class EmbedService
         return embed.Build();
     }
 
+    /// <summary>
+    /// Builds a Discord embed that lists a user's pending market orders.
+    /// </summary>
+    /// <param name="username">The display name shown in the embed title.</param>
+    /// <param name="orders">The pending orders to display; up to 25 orders are shown and additional orders are noted.</param>
+    /// <returns>An Embed containing the pending orders or a message that no pending orders exist.</returns>
     public Embed BuildPendingOrders(string username, List<PendingTransaction> orders)
     {
         var embed = new EmbedBuilder()
@@ -180,6 +186,10 @@ public class EmbedService
         return embed.Build();
     }
 
+    /// <summary>
+    /// Builds an informational embed listing available Stonk Market Game commands and usage examples.
+    /// </summary>
+    /// <returns>An Embed containing command descriptions, examples, and a getting-started guide for the game.</returns>
     public Embed BuildHelp()
     {
         var embed = new EmbedBuilder()

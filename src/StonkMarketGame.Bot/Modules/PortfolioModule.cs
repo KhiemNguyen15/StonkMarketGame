@@ -117,6 +117,12 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
         await FollowupAsync(embed: embed);
     }
 
+    /// <summary>
+    /// Displays the invoking user's pending orders, or informs them if none exist.
+    /// </summary>
+    /// <remarks>
+    /// Sends an embed containing the list of pending orders, an informational embed when no orders are present, or an error embed if order retrieval fails.
+    /// </remarks>
     [SlashCommand("pending", "View your pending orders")]
     public async Task Pending()
     {
@@ -145,6 +151,10 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
         await FollowupAsync(embed: embed2);
     }
 
+    /// <summary>
+    /// Cancels the calling user's pending order identified by the provided numeric order code.
+    /// </summary>
+    /// <param name="orderCode">The numeric code of the pending order to cancel (e.g., 123).</param>
     [SlashCommand("cancel-order", "Cancel a pending order")]
     public async Task CancelOrder(
         [Summary("order-code", "The order code (e.g., 123)")] int orderCode)

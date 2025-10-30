@@ -10,6 +10,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<PendingTransaction> PendingTransactions { get; set; }
 
+    /// <summary>
+    /// Configures EF Core mappings, keys, value conversions, owned types, and indexes for the application's entities.
+    /// </summary>
+    /// <param name="modelBuilder">The ModelBuilder used to configure entity types, relationships, value conversions, and indexes.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserPortfolio>(entity =>

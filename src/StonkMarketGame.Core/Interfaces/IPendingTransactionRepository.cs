@@ -24,12 +24,20 @@ public interface IPendingTransactionRepository
 
     /// <summary>
     /// Gets a pending transaction by ID.
-    /// </summary>
+    /// <summary>
+/// Retrieve a pending transaction by its identifier.
+/// </summary>
+/// <param name="id">The identifier of the pending transaction to retrieve.</param>
+/// <returns>The pending transaction with the specified identifier, or null if not found.</returns>
     Task<PendingTransaction?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets a pending transaction by short code.
-    /// </summary>
+    /// <summary>
+/// Retrieves a pending transaction that matches the specified short code.
+/// </summary>
+/// <param name="shortCode">Numeric short code assigned to the pending transaction.</param>
+/// <returns>The matching <see cref="PendingTransaction"/> if found, otherwise <c>null</c>.</returns>
     Task<PendingTransaction?> GetByShortCodeAsync(int shortCode, CancellationToken cancellationToken = default);
 
     /// <summary>

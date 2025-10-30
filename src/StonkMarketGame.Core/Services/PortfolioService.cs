@@ -188,6 +188,14 @@ public class PortfolioService : IPortfolioService
         }
     }
 
+    /// <summary>
+    /// Retrieves the pending (queued) transactions for the specified user.
+    /// </summary>
+    /// <param name="userId">The identifier of the user whose pending orders to retrieve.</param>
+    /// <returns>
+    /// A Result containing the list of the user's pending <see cref="PendingTransaction"/> objects on success;
+    /// a failed Result with an error message if retrieval fails.
+    /// </returns>
     public async Task<Result<List<PendingTransaction>>> GetPendingOrdersAsync(ulong userId)
     {
         try
@@ -201,6 +209,16 @@ public class PortfolioService : IPortfolioService
         }
     }
 
+    /// <summary>
+    /// Attempts to cancel a pending order identified by its short code for the specified user.
+    /// </summary>
+    /// <param name="userId">The ID of the user requesting the cancellation.</param>
+    /// <param name="shortCode">The integer short code that identifies the pending order.</param>
+    /// <returns>
+    /// A <see cref="Result"/> that is Ok with a success message when the order is cancelled,
+    /// or Fail with an explanatory error message if the order is not found, does not belong to the user,
+    /// cannot be cancelled due to its status, or an unexpected error occurs.
+    /// </returns>
     public async Task<Result> CancelPendingOrderAsync(ulong userId, int shortCode)
     {
         try

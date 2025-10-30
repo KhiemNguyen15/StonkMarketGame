@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -8,7 +8,9 @@ namespace StonkMarketGame.Infrastructure.Migrations
     /// <inheritdoc />
     public partial class AddShortCodeToPendingTransaction : Migration
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Adds a non-nullable integer ShortCode column to PendingTransactions, backfills existing rows with sequential values ordered by RequestedAt, resets the underlying PostgreSQL sequence to follow the current maximum ShortCode, and creates a unique index on ShortCode.
+        /// </summary>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
