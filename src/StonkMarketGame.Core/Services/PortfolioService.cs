@@ -201,11 +201,11 @@ public class PortfolioService : IPortfolioService
         }
     }
 
-    public async Task<Result> CancelPendingOrderAsync(ulong userId, string orderId)
+    public async Task<Result> CancelPendingOrderAsync(ulong userId, int shortCode)
     {
         try
         {
-            var order = await _pendingTransactionRepository.GetByIdAsync(orderId);
+            var order = await _pendingTransactionRepository.GetByShortCodeAsync(shortCode);
 
             if (order == null)
                 return Result.Fail("Order not found.");

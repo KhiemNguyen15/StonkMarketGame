@@ -28,6 +28,11 @@ public interface IPendingTransactionRepository
     Task<PendingTransaction?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets a pending transaction by short code.
+    /// </summary>
+    Task<PendingTransaction?> GetByShortCodeAsync(int shortCode, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Updates an existing pending transaction.
     /// </summary>
     Task UpdateAsync(PendingTransaction transaction, CancellationToken cancellationToken = default);

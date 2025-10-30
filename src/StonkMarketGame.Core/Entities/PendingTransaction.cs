@@ -8,6 +8,7 @@ namespace StonkMarketGame.Core.Entities;
 public class PendingTransaction
 {
     public string Id { get; private set; }
+    public int ShortCode { get; private set; }
     public ulong UserId { get; private set; }
     public TickerSymbol Ticker { get; private set; }
     public TransactionType Type { get; private set; }

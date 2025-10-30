@@ -41,6 +41,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<PendingTransaction>(entity =>
         {
             entity.HasKey(t => t.Id);
+            entity.Property(t => t.ShortCode)
+                .ValueGeneratedOnAdd()
+                .UseIdentityColumn();
             entity.Property(t => t.Ticker)
                 .HasConversion(
                     v => v.Value,
@@ -51,6 +54,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasConversion<string>();
             entity.HasIndex(t => new { t.Status, t.ScheduledFor });
             entity.HasIndex(t => t.UserId);
+            entity.HasIndex(t => t.ShortCode).IsUnique();
         });
     }
 }
