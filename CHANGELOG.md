@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v1.0.0...v1.1.0) (2025-10-30)
+
+
+### Features
+
+* Add short order cancellation codes ([#25](https://github.com/KhiemNguyen15/StonkMarketGame/issues/25)) ([3912f29](https://github.com/KhiemNguyen15/StonkMarketGame/commit/3912f299b0b8acbb81d7ff014e2aa9b1fc1d29a9))
+* **bot:** Improve formatting of Order Success and Order Cancelled messages ([8779b96](https://github.com/KhiemNguyen15/StonkMarketGame/commit/8779b963f3d3a60ab5958e8953c56fb338672b50))
+
 # [1.0.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.5.2...v1.0.0) (2025-10-30)
 
 
