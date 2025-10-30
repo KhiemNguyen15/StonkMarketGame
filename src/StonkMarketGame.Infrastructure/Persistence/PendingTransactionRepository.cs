@@ -43,6 +43,12 @@ public class PendingTransactionRepository : IPendingTransactionRepository
             .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
 
+    public async Task<PendingTransaction?> GetByShortCodeAsync(int shortCode, CancellationToken cancellationToken = default)
+    {
+        return await _db.PendingTransactions
+            .FirstOrDefaultAsync(t => t.ShortCode == shortCode, cancellationToken);
+    }
+
     public async Task UpdateAsync(PendingTransaction transaction, CancellationToken cancellationToken = default)
     {
         _db.PendingTransactions.Update(transaction);
