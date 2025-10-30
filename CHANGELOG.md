@@ -1,3 +1,13 @@
+# [1.0.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.5.2...v1.0.0) (2025-10-30)
+
+
+* feat!: Add market-on-open orders (#21) ([479f6f4](https://github.com/KhiemNguyen15/StonkMarketGame/commit/479f6f4b9bc9fd06f611558a503b5c92e2c227ec)), closes [#21](https://github.com/KhiemNguyen15/StonkMarketGame/issues/21)
+
+
+### BREAKING CHANGES
+
+* Initial release
+
 ## [0.5.2](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v0.5.1...v0.5.2) (2025-09-16)
 
 
