@@ -37,6 +37,7 @@ public static class ServiceRegistrar
         services.AddSingleton<InteractionHandler>();
         services.AddSingleton<EmbedService>();
         services.AddHostedService<BotService>();
+        services.AddHostedService<PendingTransactionProcessorService>();
     }
 
     private static void RegisterDatabaseServices(IServiceCollection services, IConfiguration configuration)
@@ -97,8 +98,17 @@ public static class ServiceRegistrar
         services.Configure<GameSettings>(configuration.GetSection("Game"));
         services.Configure<ResilienceSettings>(configuration.GetSection("Resilience"));
 
+        // Market hours configuration and validation
+        var marketHoursSettings = configuration.GetSection("MarketHours").Get<MarketHoursSettings>() ?? new MarketHoursSettings();
+        services.AddSingleton(marketHoursSettings);
+        services.AddScoped<IMarketHoursValidator, MarketHoursValidator>();
+
+        // Repositories
         services.AddScoped<IMarketDataProvider, FinnhubMarketDataProvider>();
         services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+        services.AddScoped<IPendingTransactionRepository, PendingTransactionRepository>();
+
+        // Services
         services.AddScoped<IPortfolioService, PortfolioService>();
     }
 }

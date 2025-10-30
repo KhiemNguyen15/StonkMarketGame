@@ -116,4 +116,56 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
 
         await FollowupAsync(embed: embed);
     }
+
+    [SlashCommand("pending", "View your pending orders")]
+    public async Task Pending()
+    {
+        await DeferAsync();
+
+        var result = await _portfolioService.GetPendingOrdersAsync(Context.User.Id);
+
+        if (result.IsFailed)
+        {
+            _logger.LogWarning("Pending orders lookup failed for user {UserId}", Context.User.Id);
+            var errorEmbed = _embedService.BuildError("Action Failed", "Failed to load your pending orders");
+            await FollowupAsync(embed: errorEmbed);
+            return;
+        }
+
+        var orders = result.Value;
+
+        if (orders.Count == 0)
+        {
+            var embed = _embedService.BuildInfo("Pending Orders", "You have no pending orders.");
+            await FollowupAsync(embed: embed);
+            return;
+        }
+
+        var embed2 = _embedService.BuildPendingOrders(Context.User.Username, orders);
+        await FollowupAsync(embed: embed2);
+    }
+
+    [SlashCommand("cancel-order", "Cancel a pending order")]
+    public async Task CancelOrder(string orderId)
+    {
+        await DeferAsync();
+
+        var result = await _portfolioService.CancelPendingOrderAsync(Context.User.Id, orderId);
+
+        if (result.IsSuccess)
+        {
+            var embed = _embedService.BuildSuccess("Order Cancelled", result.Successes.First().Message);
+            await FollowupAsync(embed: embed);
+        }
+        else
+        {
+            _logger.LogWarning("Cancel order failed for user {UserId}, order {OrderId}: {Message}",
+                Context.User.Id,
+                orderId,
+                result.Errors.First().Message);
+
+            var embed = _embedService.BuildError("Cancel Failed", result.Errors.First().Message);
+            await FollowupAsync(embed: embed);
+        }
+    }
 }

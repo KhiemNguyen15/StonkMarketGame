@@ -30,6 +30,17 @@ public class EmbedService
             .Build();
     }
 
+    public Embed BuildInfo(string title, string description)
+    {
+        return new EmbedBuilder()
+            .WithTitle($"{title}")
+            .WithDescription(description)
+            .WithColor(BotColor)
+            .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game")
+            .Build();
+    }
+
     public Embed BuildPortfolio(
         string username,
         decimal cashBalance,
@@ -126,6 +137,49 @@ public class EmbedService
         return embed.Build();
     }
 
+    public Embed BuildPendingOrders(string username, List<PendingTransaction> orders)
+    {
+        var embed = new EmbedBuilder()
+            .WithTitle($"{username}'s Pending Orders")
+            .WithColor(new Color(0xFFA500)) // Orange
+            .WithCurrentTimestamp()
+            .WithFooter("Stonk Market Game");
+
+        if (orders.Count == 0)
+        {
+            embed.WithDescription("You have no pending orders.");
+            return embed.Build();
+        }
+
+        embed.WithDescription($"You have {orders.Count} pending order{(orders.Count > 1 ? "s" : "")} scheduled for execution.");
+
+        foreach (var order in orders.Take(25)) // Discord embed field limit
+        {
+            var typeText = order.Type == TransactionType.Buy ? "BUY" : "SELL";
+            var scheduledTimestamp = new DateTimeOffset(order.ScheduledFor).ToUnixTimeSeconds();
+            var requestedTimestamp = new DateTimeOffset(order.RequestedAt).ToUnixTimeSeconds();
+
+            embed.AddField(
+                $"{typeText} {order.Ticker.Value}",
+                $"Quantity: `{order.Quantity}` shares\n" +
+                $"Scheduled: <t:{scheduledTimestamp}:f>\n" +
+                $"Requested: <t:{requestedTimestamp}:R>\n" +
+                $"Order ID: `{order.Id}`",
+                inline: false);
+        }
+
+        if (orders.Count > 25)
+        {
+            embed.AddField("\u200B", $"*...and {orders.Count - 25} more orders*", inline: false);
+        }
+
+        embed.WithDescription(
+            embed.Description +
+            "\n\nUse `/cancel-order <order-id>` to cancel a pending order.");
+
+        return embed.Build();
+    }
+
     public Embed BuildHelp()
     {
         var embed = new EmbedBuilder()
@@ -145,6 +199,8 @@ public class EmbedService
             "`/history` - View your trading history\n" +
             "`/buy <ticker> <quantity>` - Buy shares of a stock\n" +
             "`/sell <ticker> <quantity>` - Sell shares from your portfolio\n" +
+            "`/pending` - View your pending orders (queued when market is closed)\n" +
+            "`/cancel-order <order-id>` - Cancel a pending order\n" +
             "Example: `/buy MSFT 10`, `/sell AAPL 5`",
             inline: false);
 
