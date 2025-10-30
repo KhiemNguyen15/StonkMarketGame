@@ -164,7 +164,7 @@ public class EmbedService
                 $"Quantity: `{order.Quantity}` shares\n" +
                 $"Scheduled: <t:{scheduledTimestamp}:f>\n" +
                 $"Requested: <t:{requestedTimestamp}:R>\n" +
-                $"Order ID: `{order.Id}`",
+                $"Order Code: `#{order.ShortCode}`",
                 inline: false);
         }
 
@@ -175,7 +175,7 @@ public class EmbedService
 
         embed.WithDescription(
             embed.Description +
-            "\n\nUse `/cancel-order <order-id>` to cancel a pending order.");
+            "\n\nUse `/cancel-order <order-code>` to cancel a pending order.");
 
         return embed.Build();
     }
@@ -200,7 +200,7 @@ public class EmbedService
             "`/buy <ticker> <quantity>` - Buy shares of a stock\n" +
             "`/sell <ticker> <quantity>` - Sell shares from your portfolio\n" +
             "`/pending` - View your pending orders (queued when market is closed)\n" +
-            "`/cancel-order <order-id>` - Cancel a pending order\n" +
+            "`/cancel-order <order-code>` - Cancel a pending order\n" +
             "Example: `/buy MSFT 10`, `/sell AAPL 5`",
             inline: false);
 

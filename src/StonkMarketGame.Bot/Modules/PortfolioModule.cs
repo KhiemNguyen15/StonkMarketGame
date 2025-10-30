@@ -146,11 +146,12 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
     }
 
     [SlashCommand("cancel-order", "Cancel a pending order")]
-    public async Task CancelOrder(string orderId)
+    public async Task CancelOrder(
+        [Summary("order-code", "The order code (e.g., 123)")] int orderCode)
     {
         await DeferAsync();
 
-        var result = await _portfolioService.CancelPendingOrderAsync(Context.User.Id, orderId);
+        var result = await _portfolioService.CancelPendingOrderAsync(Context.User.Id, orderCode);
 
         if (result.IsSuccess)
         {
@@ -159,9 +160,9 @@ public class PortfolioModule : InteractionModuleBase<SocketInteractionContext>
         }
         else
         {
-            _logger.LogWarning("Cancel order failed for user {UserId}, order {OrderId}: {Message}",
+            _logger.LogWarning("Cancel order failed for user {UserId}, order code {OrderCode}: {Message}",
                 Context.User.Id,
-                orderId,
+                orderCode,
                 result.Errors.First().Message);
 
             var embed = _embedService.BuildError("Cancel Failed", result.Errors.First().Message);

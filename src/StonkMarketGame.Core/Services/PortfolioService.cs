@@ -96,7 +96,7 @@ public class PortfolioService : IPortfolioService
         var transaction = new Transaction(userId, ticker, TransactionType.Buy, quantity, price);
         await _portfolioRepository.SavePortfolioAndTransactionAsync(portfolio, transaction);
 
-        return Result.Ok().WithSuccess($"Bought {quantity} shares of {ticker} at {price:C} for {totalCost:C}.");
+        return Result.Ok().WithSuccess($"Bought **{quantity:N0}** shares of **{ticker}** at **{price:C}** for **{totalCost:C}**.");
     }
 
     public async Task<Result> SellAsync(ulong userId, TickerSymbol ticker, int quantity)
@@ -166,7 +166,7 @@ public class PortfolioService : IPortfolioService
         var transaction = new Transaction(userId, ticker, TransactionType.Sell, quantity, price);
         await _portfolioRepository.SavePortfolioAndTransactionAsync(portfolio, transaction);
 
-        return Result.Ok().WithSuccess($"Sold {quantity} shares of {ticker} at {price:C} for {totalProceeds:C}.");
+        return Result.Ok().WithSuccess($"Sold **{quantity:N0}** shares of **{ticker}** at **{price:C}** for **{totalProceeds:C}**.");
     }
 
     public async Task<Result<UserPortfolio>> GetPortfolioAsync(ulong userId)
@@ -201,11 +201,11 @@ public class PortfolioService : IPortfolioService
         }
     }
 
-    public async Task<Result> CancelPendingOrderAsync(ulong userId, string orderId)
+    public async Task<Result> CancelPendingOrderAsync(ulong userId, int shortCode)
     {
         try
         {
-            var order = await _pendingTransactionRepository.GetByIdAsync(orderId);
+            var order = await _pendingTransactionRepository.GetByShortCodeAsync(shortCode);
 
             if (order == null)
                 return Result.Fail("Order not found.");
@@ -222,7 +222,7 @@ public class PortfolioService : IPortfolioService
 
             return Result.Ok()
                 .WithSuccess(
-                    $"Successfully cancelled your order to {order.Type.ToString().ToLower()} {order.Quantity:N0} shares of {order.Ticker}.");
+                    $"Successfully cancelled your order to {order.Type.ToString().ToLower()} **{order.Quantity:N0}** shares of **{order.Ticker}**.");
         }
         catch (Exception ex)
         {
