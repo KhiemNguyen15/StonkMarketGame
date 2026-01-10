@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v1.1.0...v1.2.0) (2026-01-10)
+
+
+### Features
+
+* **bot:** Add health check endpoint for uptime monitoring ([be839f0](https://github.com/KhiemNguyen15/StonkMarketGame/commit/be839f02e7b159f1927a1e3d2c80ba5d8f3c10a5))
+
 # [1.1.0](https://github.com/KhiemNguyen15/StonkMarketGame/compare/v1.0.0...v1.1.0) (2025-10-30)
 
 
