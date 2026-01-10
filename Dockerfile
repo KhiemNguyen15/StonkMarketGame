@@ -41,5 +41,8 @@ ENV ASPNETCORE_ENVIRONMENT=Production
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
+# Expose health check port
+EXPOSE 8080
+
 # Run the application
 ENTRYPOINT ["dotnet", "StonkMarketGame.Bot.dll"]
